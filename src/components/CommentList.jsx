@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
 import React from "react";
+import BadComment from "./BadComment";
 import CommentItem from "./CommentItem";
 
 function CommentList(props) {
@@ -25,11 +25,20 @@ function CommentList(props) {
     });
   };
 
+  const setVisible = (date) => {
+    setCommentsArray((prevArr) => {
+      const newArr = prevArr.map((el) =>
+        el.createDateUTC === date ? { ...el, isVisible: true } : el
+      );
+      return newArr;
+    });
+  };
+
   return (
     <div>
       {commentsArray.map((item, index) =>
-        item.rating < -10 ? (
-          <Typography>Открыть комментарий</Typography>
+        item.rating < -10 && !item.isVisible ? (
+          <BadComment setVisible={setVisible} date={item.createDateUTC}/>
         ) : (
           <CommentItem
             key={index}

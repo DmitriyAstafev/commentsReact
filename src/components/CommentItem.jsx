@@ -1,10 +1,11 @@
 import {
   Avatar,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
+  Card,
+  CardContent,
+  CardHeader,
+  CardActions,
   Typography,
+  Button,
 } from "@mui/material";
 import React from "react";
 
@@ -27,25 +28,27 @@ function CommentItem(props) {
   };
 
   return (
-    <ListItem>
-      <ListItemAvatar>
-        <Avatar></Avatar>
-      </ListItemAvatar>
-      <ListItemText
-        primary={name}
-        secondary={
-          <React.Fragment>
-            <Typography>{getInterval(timeInterval)}</Typography>
-            <Typography>{commentText}</Typography>
-          </React.Fragment>
-        }
-      ></ListItemText>
-      <ListItemButton onClick={() => ratingUp(createDateUTC)}>+</ListItemButton>
-      <Typography>{rating}</Typography>
-      <ListItemButton onClick={() => ratingDown(createDateUTC)}>
-        -
-      </ListItemButton>
-    </ListItem>
+    <Card sx={{ mb: 1 }}>
+      <CardHeader
+        avatar={<Avatar></Avatar>}
+        title={name}
+        subheader={getInterval(timeInterval)}
+      />
+      <CardContent>
+        <Typography variant="body2" color="text.secondary">
+          {commentText}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <Button onClick={() => ratingUp(createDateUTC)} color="success">
+          +
+        </Button>
+        <Typography variant="body2">{rating}</Typography>
+        <Button onClick={() => ratingDown(createDateUTC)} color="error">
+          -
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
 

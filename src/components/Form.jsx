@@ -1,5 +1,5 @@
 import { Button, Stack, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 function Form(props) {
@@ -14,20 +14,20 @@ function Form(props) {
     const date = Date.parse(new Date().toISOString());
     setCommentsArray([
       ...commentsArray,
-      { ...commentData, createDateUTC: date, rating: 0 },
+      { ...commentData, createDateUTC: date, rating: 0, isVisible: false },
     ]);
     localStorage.setItem(
       "comments",
       JSON.stringify([
         ...commentsArray,
-        { ...commentData, createDateUTC: date, rating: 0 },
+        { ...commentData, createDateUTC: date, rating: 0, isVisible: false },
       ])
     );
   };
   return (
     <>
       <form onSubmit={handleSubmit(createCommentHandler)}>
-        <Stack>
+        <Stack spacing={2}>
           <TextField
             name="name"
             label="Имя"
