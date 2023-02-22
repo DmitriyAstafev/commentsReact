@@ -3,36 +3,7 @@ import BadComment from "./BadComment";
 import CommentItem from "./CommentItem";
 
 function CommentList(props) {
-  const { commentsArray, setCommentsArray } = props;
-
-  const ratingUp = (date) => {
-    setCommentsArray((prevArr) => {
-      const newArr = prevArr.map((el) =>
-        el.createDateUTC === date ? { ...el, rating: el.rating + 1 } : el
-      );
-      localStorage.setItem("comments", JSON.stringify(newArr));
-      return newArr;
-    });
-  };
-
-  const ratingDown = (date) => {
-    setCommentsArray((prevArr) => {
-      const newArr = prevArr.map((el) =>
-        el.createDateUTC === date ? { ...el, rating: el.rating - 1 } : el
-      );
-      localStorage.setItem("comments", JSON.stringify(newArr));
-      return newArr;
-    });
-  };
-
-  const setVisible = (date) => {
-    setCommentsArray((prevArr) => {
-      const newArr = prevArr.map((el) =>
-        el.createDateUTC === date ? { ...el, isVisible: true } : el
-      );
-      return newArr;
-    });
-  };
+  const { commentsArray,ratingUp,ratingDown,setVisible } = props;
 
   return (
     <div>

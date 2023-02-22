@@ -14,15 +14,61 @@ function App() {
     setCommentsArray(comments);
   }, []);
 
+  const createCommentHandler = (commentData) => {
+    const date = Date.parse(new Date().toISOString());
+    setCommentsArray([
+      ...commentsArray,
+      { ...commentData, createDateUTC: date, rating: 0, isVisible: false },
+    ]);
+    localStorage.setItem(
+      "comments",
+      JSON.stringify([
+        ...commentsArray,
+        { ...commentData, createDateUTC: date, rating: 0, isVisible: false },
+      ])
+    );
+  };
+
+  const ratingUp = (date) => {
+    setCommentsArray((prevArr) => {
+      const newArr = prevArr.map((el) =>
+        el.createDateUTC === date ? { ...el, rating: el.rating + 1 } : el
+      );
+      localStorage.setItem("comments", JSON.stringify(newArr));
+      return newArr;
+    });
+  };
+
+  const ratingDown = (date) => {
+    setCommentsArray((prevArr) => {
+      const newArr = prevArr.map((el) =>
+        el.createDateUTC === date ? { ...el, rating: el.rating - 1 } : el
+      );
+      localStorage.setItem("comments", JSON.stringify(newArr));
+      return newArr;
+    });
+  };
+
+  const setVisible = (date) => {
+    setCommentsArray((prevArr) => {
+      const newArr = prevArr.map((el) =>
+        el.createDateUTC === date ? { ...el, isVisible: true } : el
+      );
+      return newArr;
+    });
+  };
+
   return (
     <>
     <Typography variant="h3" align="center">Система комментариев на ReactJS</Typography>
     <Container maxWidth="sm">
       <CommentList
         commentsArray={commentsArray}
-        setCommentsArray={setCommentsArray}
+        ratingUp={ratingUp}
+        ratingDown={ratingDown}
+        setVisible={setVisible}
       />
-      <Form commentsArray={commentsArray} setCommentsArray={setCommentsArray} />
+      <Form createCommentHandler={createCommentHandler} />
     </Container>
     </>
   );
