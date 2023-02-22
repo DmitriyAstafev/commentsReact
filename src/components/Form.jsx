@@ -1,66 +1,70 @@
 import { Button, Stack, TextField } from "@mui/material";
 import React, { useState } from "react";
-
-const initComment = {
-  name: "",
-  email: "",
-  commentText: "",
-  rating: 0,
-  createDateUTC: 0,
-};
+import { useForm } from "react-hook-form";
 
 function Form(props) {
   const { commentsArray, setCommentsArray } = props;
-  console.log(commentsArray, "------------------");
-  const [inputValue, setInputValue] = useState(initComment);
-  // const [commentsArray, setCommentsArray] = useState(comments);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const changeHandler = (e) => {
-    setInputValue({
-      ...inputValue,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const createCommentHandler = () => {
+  const createCommentHandler = (commentData) => {
     const date = Date.parse(new Date().toISOString());
     setCommentsArray([
       ...commentsArray,
-      { ...inputValue, createDateUTC: date },
+      { ...commentData, createDateUTC: date, rating: 0 },
     ]);
-    // setInputValue({...inputValue, createDateUTC: date});
     localStorage.setItem(
       "comments",
-      JSON.stringify([...commentsArray, { ...inputValue, createDateUTC: date }])
+      JSON.stringify([
+        ...commentsArray,
+        { ...commentData, createDateUTC: date, rating: 0 },
+      ])
     );
   };
-  // console.log(inputValue);
-  // console.log(commentsArray);
-
   return (
     <>
-      <Stack>
-        <TextField
-          onChange={changeHandler}
-          name="name"
-          label="Имя"
-          variant="outlined"
-        />
-        <TextField
-          onChange={changeHandler}
-          name="email"
-          label="Электронная почта"
-          variant="outlined"
-        />
-        <TextField
-          onChange={changeHandler}
-          multiline={true}
-          minRows={5}
-          name="commentText"
-          label="Комментарий"
-          variant="outlined"
-        />
-        <Button onClick={createCommentHandler}>Отправить комментарий</Button>
-      </Stack>
+      <form onSubmit={handleSubmit(createCommentHandler)}>
+        <Stack>
+          <TextField
+            name="name"
+            label="Имя"
+            variant="outlined"
+            {...register("name", { required: "Введите свое имя" })}
+            error={Boolean(errors.name)}
+            helperText={errors.name?.message}
+          />
+          <TextField
+            name="email"
+            label="Электронная почта"
+            variant="outlined"
+            {...register("email", {
+              required: "Введите адрес электронной почты",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Введите корректный адрес электронной почты",
+              },
+            })}
+            error={Boolean(errors.email)}
+            helperText={errors.email?.message}
+          />
+          <TextField
+            multiline={true}
+            minRows={5}
+            name="commentText"
+            label="Комментарий"
+            variant="outlined"
+            {...register("commentText", {
+              required: "Введите текст комментария",
+            })}
+            error={Boolean(errors.commentText)}
+            helperText={errors.commentText?.message}
+          />
+          <Button type="submit">Отправить комментарий</Button>
+        </Stack>
+      </form>
     </>
   );
 }

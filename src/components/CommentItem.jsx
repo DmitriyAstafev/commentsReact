@@ -9,7 +9,6 @@ import {
 import React from "react";
 
 function CommentItem(props) {
-  console.log(props, "==========");
   const { name, commentText, rating, createDateUTC, ratingUp, ratingDown } =
     props;
   const timeInterval = Date.parse(new Date().toISOString()) - createDateUTC;

@@ -13,7 +13,7 @@ function App() {
     }
     setCommentsArray(comments);
   }, []);
-  console.log(commentsArray);
+
   return (
     <Container>
       <CommentList

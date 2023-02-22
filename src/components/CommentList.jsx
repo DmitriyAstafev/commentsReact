@@ -25,8 +25,6 @@ function CommentList(props) {
     });
   };
 
-  console.log(commentsArray, "---0-0");
-
   return (
     <div>
       {commentsArray.map((item, index) =>
